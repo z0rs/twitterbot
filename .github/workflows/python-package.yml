@@ -1,26 +1,27 @@
-name: Watch Tweet
+name: Watch Private Tweet
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # setiap 5 menit
-  workflow_dispatch:
+    - cron: '*/5 * * * *'   # run setiap 5 menit
+  workflow_dispatch:        # bisa dijalankan manual juga
 
 jobs:
-  watch:
+  tweetwatcher:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           pip install -r requirements.txt
-          playwright install --with-deps
+          python -m playwright install --with-deps
 
-      - name: Run watcher
+      - name: Run watcher script
         run: python watcher.py
