@@ -1,26 +1,25 @@
-name: Watch Tweet
+name: Test Playwright Tweet Checker
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'  # setiap 5 menit
-  workflow_dispatch:
+  workflow_dispatch: # Manual trigger dari GitHub UI
 
 jobs:
-  watch:
+  tweet-checker:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
-          playwright install --with-deps
+          pip install playwright requests
+          playwright install chromium
 
-      - name: Run watcher
-        run: python watcher.py
+      - name: Run script (1x loop only)
+        run: |
+          python tweet_check.py
